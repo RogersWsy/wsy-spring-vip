@@ -5,17 +5,24 @@ import com.wsy.AppConfig;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.URL;
+import java.util.HashMap;
 
 public class WsyApplicationContext {
 
     private Class configClass;
 
+    HashMap<String, BeanDefinition> beanMap = new HashMap<String, BeanDefinition>();
+
     public WsyApplicationContext(Class configClass) {
 
         this.configClass = configClass;
 
+        scan(configClass);
+    }
+
+    private void scan(Class configClass) {
         if(configClass.isAnnotationPresent(ComponentScan.class)){
-            ComponentScan componentScan = (ComponentScan)configClass.getAnnotation(ComponentScan.class);
+            ComponentScan componentScan = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
             //获取到注解的value，也就是扫描包
             String scanPath = componentScan.value();//com.wsy.service
             System.out.println(scanPath);
@@ -46,16 +53,23 @@ public class WsyApplicationContext {
                         Class<?> aClass = classLoader.loadClass(absolutePath);
                         //分析是否有 @component注解  有就是 @bean
                         if(aClass.isAnnotationPresent(Component.class)){
+
+                            //获取到bean的名字
+                            Component annotation = aClass.getAnnotation(Component.class);
+                            String beanName = annotation.value();
+
+                            BeanDefinition beanDefinition = new BeanDefinition();
+                            beanDefinition.setType(aClass);
+
                             //判断多例还是单例
                             if(aClass.isAnnotationPresent(Scope.class)){
                                 Scope scope = aClass.getAnnotation(Scope.class);
-
-                                if("singleton".equals(scope.value())){
-
-                                }else{
-
-                                }
+                                String value = scope.value();
+                                beanDefinition.setScope(value);
+                            }else{
+                                beanDefinition.setScope("singleton");
                             }
+                            beanMap.put(beanName,beanDefinition);
                         }
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
