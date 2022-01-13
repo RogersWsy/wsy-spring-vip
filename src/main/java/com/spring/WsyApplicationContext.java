@@ -6,6 +6,7 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 public class WsyApplicationContext {
 
@@ -17,9 +18,22 @@ public class WsyApplicationContext {
 
         this.configClass = configClass;
 
+        //扫描bean
         scan(configClass);
+        //创建bean
+        for (Map.Entry<String, BeanDefinition> stringBeanDefinitionEntry : beanMap.entrySet()) {
+            String beanName = stringBeanDefinitionEntry.getKey();
+            BeanDefinition beanDefinition = stringBeanDefinitionEntry.getValue();
+            if(beanDefinition.getScope().equals("singleton")){
+                Object bean = creatBean(beanName, beanDefinition);
+
+            }
+        }
     }
 
+    private Object creatBean(String name, BeanDefinition beanDefinition){
+        return null;
+    }
     private void scan(Class configClass) {
         if(configClass.isAnnotationPresent(ComponentScan.class)){
             ComponentScan componentScan = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
@@ -80,7 +94,19 @@ public class WsyApplicationContext {
         }
     }
 
-    public Object getBean(String beanName){
+    public Object getBean(String beanName) throws Exception {
+        if(!beanMap.containsKey(beanName)){
+            throw new Exception("bean不存在");
+        }
+        BeanDefinition beanDefinition = beanMap.get(beanName);
+        //判断bean是单例还是原型
+        String scope = beanDefinition.getScope();
+        if("singleton".equals(scope)){
+
+        }else{
+            //多例（原型）
+        }
+
         return null;
     }
 }
