@@ -7,7 +7,16 @@ public class Test {
     public static void main(String[] args) {
 
         WsyApplicationContext applicationContext = new WsyApplicationContext(AppConfig.class);
-        UserService userService = (UserService) applicationContext.getBean("userService");
-        userService.test();
+
+        UserService userService = null;
+        try {
+//            userService = (UserService) applicationContext.getBean("userService");
+            System.out.println(applicationContext.getBean("userService"));
+            System.out.println(applicationContext.getBean("userService"));
+            System.out.println(applicationContext.getBean("userService"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        userService.test();
     }
 }

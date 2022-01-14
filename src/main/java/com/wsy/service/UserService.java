@@ -5,7 +5,7 @@ import com.spring.Component;
 import com.spring.Scope;
 
 @Component("userService")
-@Scope("prototype")
+@Scope("singleton")
 public class UserService {
 
     public void test(){
