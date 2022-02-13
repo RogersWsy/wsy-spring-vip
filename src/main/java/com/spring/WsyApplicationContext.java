@@ -2,6 +2,7 @@ package com.spring;
 
 import com.wsy.AppConfig;
 
+import java.beans.Introspector;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -92,6 +93,10 @@ public class WsyApplicationContext {
                             //获取到bean的名字
                             Component annotation = aClass.getAnnotation(Component.class);
                             String beanName = annotation.value();
+                            if("".equals(beanName)){
+                                //根据类名生成一个名字
+                                beanName = Introspector.decapitalize(aClass.getSimpleName());//TODO
+                            }
 
                             //设置bean的类型
                             BeanDefinition beanDefinition = new BeanDefinition();

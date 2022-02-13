@@ -1,14 +1,18 @@
 package com.wsy.service;
 
 
+import com.spring.Autowired;
 import com.spring.Component;
 import com.spring.Scope;
 
 @Component("userService")
-@Scope("singleton")
+@Scope("prototype")
 public class UserService {
 
+    @Autowired
+    private OrderService orderService;
+
     public void test(){
-        System.out.println("有@component注解");
+        System.out.println(orderService);
     }
 }
