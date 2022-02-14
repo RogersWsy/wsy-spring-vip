@@ -5,6 +5,7 @@ import com.wsy.AppConfig;
 import java.beans.Introspector;
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
@@ -43,6 +44,11 @@ public class WsyApplicationContext {
         Object instance = null;
         try {
             instance = type.getConstructor().newInstance();
+            for (Field field : type.getDeclaredFields()) {
+                if(field.isAnnotationPresent(Autowired.class)){
+
+                }
+            }
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -75,14 +81,14 @@ public class WsyApplicationContext {
                 for (File f : file.listFiles()) {
                     //获取到class文件的绝对路径
                     String absolutePath = f.getAbsolutePath();// D:\project2\tuling\wsy-tuling\target\classes\com\wsy\service\UserService.class
-                    System.out.println(absolutePath);
+//                    System.out.println(absolutePath);
                     //将文件夹路径 \com\wsy\service\UserService.class 改成包引用的格式 com.wsy.service.UserService
                     absolutePath = absolutePath.substring(absolutePath.indexOf("com"),absolutePath.indexOf(".class"));
-                    System.out.println(absolutePath);
+//                    System.out.println(absolutePath);
 //                    absolutePath = absolutePath.replace("\\",".");//windows
                     absolutePath = absolutePath.replace("/",".");//mac
 
-                    System.out.println(absolutePath);
+//                    System.out.println(absolutePath);
 
                     try {
                         //加载class文件
