@@ -45,8 +45,9 @@ public class WsyApplicationContext {
         try {
             instance = type.getConstructor().newInstance();
             for (Field field : type.getDeclaredFields()) {
-                if(field.isAnnotationPresent(Autowired.class)){
-
+                if(field.isAnnotationPresent(Autowired.class)){//首先看属性上面有没有@Awtowire注解
+                    field.setAccessible(true);//开启反射
+//                    field.set();
                 }
             }
         } catch (InstantiationException e) {
@@ -85,8 +86,9 @@ public class WsyApplicationContext {
                     //将文件夹路径 \com\wsy\service\UserService.class 改成包引用的格式 com.wsy.service.UserService
                     absolutePath = absolutePath.substring(absolutePath.indexOf("com"),absolutePath.indexOf(".class"));
 //                    System.out.println(absolutePath);
-//                    absolutePath = absolutePath.replace("\\",".");//windows
-                    absolutePath = absolutePath.replace("/",".");//mac
+                    // TODO
+                    absolutePath = absolutePath.replace("\\",".");//windows
+//                    absolutePath = absolutePath.replace("/",".");//mac
 
 //                    System.out.println(absolutePath);
 
@@ -99,7 +101,7 @@ public class WsyApplicationContext {
                             //获取到bean的名字
                             Component annotation = aClass.getAnnotation(Component.class);
                             String beanName = annotation.value();
-                            if("".equals(beanName)){
+                            if("".equals(beanName)){//没有指定类的名字
                                 //根据类名生成一个名字
                                 beanName = Introspector.decapitalize(aClass.getSimpleName());//TODO
                             }

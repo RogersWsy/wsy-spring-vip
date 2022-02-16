@@ -13,7 +13,7 @@ public class Test {
 //            userService = (UserService) applicationContext.getBean("userService");
 //            System.out.println(applicationContext.getBean("userService"));
 //            System.out.println(applicationContext.getBean("userService"));
-//            System.out.println(applicationContext.getBean("orderService"));
+            System.out.println(applicationContext.getBean("orderService"));
             UserService userService1 = (UserService)applicationContext.getBean("userService");
             userService1.test();
         } catch (Exception e) {
