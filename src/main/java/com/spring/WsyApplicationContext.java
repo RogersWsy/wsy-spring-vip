@@ -89,8 +89,8 @@ public class WsyApplicationContext {
                     absolutePath = absolutePath.substring(absolutePath.indexOf("com"),absolutePath.indexOf(".class"));
 //                    System.out.println(absolutePath);
                     // TODO
-                    absolutePath = absolutePath.replace("\\",".");//windows
-//                    absolutePath = absolutePath.replace("/",".");//mac
+//                    absolutePath = absolutePath.replace("\\",".");//windows
+                    absolutePath = absolutePath.replace("/",".");//mac
 
 //                    System.out.println(absolutePath);
 
