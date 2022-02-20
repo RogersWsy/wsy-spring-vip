@@ -18,7 +18,7 @@ public class WsyApplicationContext {
     private HashMap<String, BeanDefinition> beanMap = new HashMap<String, BeanDefinition>();
 
     //单例bean
-    private HashMap<String, BeanDefinition> singletonBeanMap = new HashMap<String, BeanDefinition>();
+    private HashMap<String, Object> singletonBeanMap = new HashMap<String, Object>();
 
     public WsyApplicationContext(Class configClass) {
 
@@ -31,8 +31,8 @@ public class WsyApplicationContext {
             String beanName = stringBeanDefinitionEntry.getKey();
             BeanDefinition beanDefinition = stringBeanDefinitionEntry.getValue();
             if(beanDefinition.getScope().equals("singleton")){
-                Object bean = creatBean(beanName, beanDefinition);
-                singletonBeanMap.put(beanName,beanDefinition);
+                Object singletonBean = creatBean(beanName, beanDefinition);
+                singletonBeanMap.put(beanName,singletonBean);
             }else{
 
             }
@@ -47,7 +47,7 @@ public class WsyApplicationContext {
             for (Field field : type.getDeclaredFields()) {
                 if(field.isAnnotationPresent(Autowired.class)){//首先看属性上面有没有@Awtowire注解
                     field.setAccessible(true);//开启反射
-//                    field.set();
+                    field.set(instance,getBean(field.getName()));
                 }
             }
         } catch (InstantiationException e) {
@@ -57,6 +57,8 @@ public class WsyApplicationContext {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return instance;
@@ -131,14 +133,19 @@ public class WsyApplicationContext {
 
     public Object getBean(String beanName) throws Exception {
         if(!beanMap.containsKey(beanName)){
-            throw new Exception("bean不存在");
+//            throw new Exception("bean不存在");
+            throw new NullPointerException();
         }
         BeanDefinition beanDefinition = beanMap.get(beanName);
         //判断bean是单例还是原型
         String scope = beanDefinition.getScope();
         if("singleton".equals(scope)){
-            BeanDefinition singletonBeanDefinition = singletonBeanMap.get(beanName);
-            return beanDefinition;
+            Object singletonBeanDefinition = singletonBeanMap.get(beanName);
+            if(singletonBeanDefinition == null){
+                singletonBeanDefinition = creatBean(beanName, beanDefinition);
+                singletonBeanMap.put(beanName,singletonBeanDefinition);
+            }
+            return singletonBeanDefinition;
         }else{
             //多例（原型）
             Object prototypeBean = creatBean(beanName, beanDefinition);
