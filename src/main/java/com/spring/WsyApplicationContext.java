@@ -43,12 +43,17 @@ public class WsyApplicationContext {
         Class type = beanDefinition.getType();
         Object instance = null;
         try {
+            //1.依赖注入
             instance = type.getConstructor().newInstance();
             for (Field field : type.getDeclaredFields()) {
                 if(field.isAnnotationPresent(Autowired.class)){//首先看属性上面有没有@Awtowire注解
                     field.setAccessible(true);//开启反射
                     field.set(instance,getBean(field.getName()));
                 }
+            }
+
+            if(instance instanceof InitializingBean){
+                ((InitializingBean) instance).afterPropertiesSet();
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -63,6 +68,15 @@ public class WsyApplicationContext {
         }
         return instance;
     }
+
+    /**
+      * @Description: 扫描逻辑
+      *
+     * @param configClass
+      * @Author: Wangsy
+      * @Date: 3/3/22
+      * @Return: void
+    **/
     private void scan(Class configClass) {
         if(configClass.isAnnotationPresent(ComponentScan.class)){
             ComponentScan componentScan = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
@@ -100,6 +114,11 @@ public class WsyApplicationContext {
                         //分析是否有 @component注解  有就是 @bean
                         if(aClass.isAnnotationPresent(Component.class)){
 
+                            //分析是不是实现了BeanPostProcessor接口
+                            if(BeanPostProcessor.class.isAssignableFrom(aClass)){
+                                BeanPostProcessor instance = (BeanPostProcessor) aClass.getConstructor().newInstance();
+                            }
+
                             //获取到bean的名字
                             Component annotation = aClass.getAnnotation(Component.class);
                             String beanName = annotation.value();
@@ -123,6 +142,14 @@ public class WsyApplicationContext {
                             beanMap.put(beanName,beanDefinition);
                         }
                     } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }
