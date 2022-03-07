@@ -8,9 +8,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+// bean 的创建过程，1，实例化 2，依赖注入 3，初始化
 public class WsyApplicationContext {
 
     private Class configClass;
@@ -19,6 +22,8 @@ public class WsyApplicationContext {
 
     //单例bean
     private HashMap<String, Object> singletonBeanMap = new HashMap<String, Object>();
+
+    private List<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
 
     public WsyApplicationContext(Class configClass) {
 
@@ -39,7 +44,7 @@ public class WsyApplicationContext {
         }
     }
 
-    private Object creatBean(String name, BeanDefinition beanDefinition){
+    private Object creatBean(String beanName, BeanDefinition beanDefinition){
         Class type = beanDefinition.getType();
         Object instance = null;
         try {
@@ -51,9 +56,13 @@ public class WsyApplicationContext {
                     field.set(instance,getBean(field.getName()));
                 }
             }
-
+            //2.初始化
             if(instance instanceof InitializingBean){
                 ((InitializingBean) instance).afterPropertiesSet();
+            }
+            //3.
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                beanPostProcessor.postProcessAfterInitialization(instance,beanName);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -117,6 +126,7 @@ public class WsyApplicationContext {
                             //分析是不是实现了BeanPostProcessor接口
                             if(BeanPostProcessor.class.isAssignableFrom(aClass)){
                                 BeanPostProcessor instance = (BeanPostProcessor) aClass.getConstructor().newInstance();
+                                beanPostProcessorList.add(instance);
                             }
 
                             //获取到bean的名字
