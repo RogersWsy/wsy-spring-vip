@@ -48,21 +48,22 @@ public class WsyApplicationContext {
         Class type = beanDefinition.getType();
         Object instance = null;
         try {
-            //1.依赖注入
+            //1.初始化
             instance = type.getConstructor().newInstance();
+            //2.依赖注入
             for (Field field : type.getDeclaredFields()) {
                 if(field.isAnnotationPresent(Autowired.class)){//首先看属性上面有没有@Awtowire注解
                     field.setAccessible(true);//开启反射
                     field.set(instance,getBean(field.getName()));
                 }
             }
-            //2.初始化
+            //3.实力化
             if(instance instanceof InitializingBean){
                 ((InitializingBean) instance).afterPropertiesSet();
             }
-            //3.
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                beanPostProcessor.postProcessAfterInitialization(instance,beanName);
+                // 可以利用这种方式实现AOP，传进去一个对象，返回值赋值给这个对象本身
+                instance = beanPostProcessor.postProcessAfterInitialization(instance,beanName);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -124,7 +125,7 @@ public class WsyApplicationContext {
                         if(aClass.isAnnotationPresent(Component.class)){
 
                             //分析是不是实现了BeanPostProcessor接口
-                            if(BeanPostProcessor.class.isAssignableFrom(aClass)){
+                            if(BeanPostProcessor.class.isAssignableFrom(aClass)){//判断是不死某一个class类型，instanceof是判断对象的
                                 BeanPostProcessor instance = (BeanPostProcessor) aClass.getConstructor().newInstance();
                                 beanPostProcessorList.add(instance);
                             }

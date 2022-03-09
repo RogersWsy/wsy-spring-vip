@@ -1,11 +1,13 @@
 package com.wsy.service;
 
 import com.spring.BeanPostProcessor;
+import com.spring.Component;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+@Component
 //Bean的后置处理器    spring的切面编程AOP就是基于这种机制
 public class WsyBeanPostProcessor implements BeanPostProcessor {
     @Override
