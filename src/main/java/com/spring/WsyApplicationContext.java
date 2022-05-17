@@ -48,7 +48,7 @@ public class WsyApplicationContext {
         Class type = beanDefinition.getType();
         Object instance = null;
         try {
-            //1.初始化
+            //1.实例化
             instance = type.getConstructor().newInstance();
             //2.依赖注入
             for (Field field : type.getDeclaredFields()) {
@@ -57,7 +57,7 @@ public class WsyApplicationContext {
                     field.set(instance,getBean(field.getName()));
                 }
             }
-            //3.实力化
+            //3.初始化
             if(instance instanceof InitializingBean){
                 ((InitializingBean) instance).afterPropertiesSet();
             }

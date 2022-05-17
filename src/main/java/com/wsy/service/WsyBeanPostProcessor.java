@@ -15,7 +15,7 @@ public class WsyBeanPostProcessor implements BeanPostProcessor {
 
 //        if(beanName.equals("userService")){
 //            //创建一个动态代理对象；jdk 的动态代理基于接口实现的，
-//            //三个参数 类加载器，被代理的接口，InvocationHandler
+//            //三个参数: 类加载器，被代理的接口，InvocationHandler
 //            Object proxyInstance = Proxy.newProxyInstance(WsyBeanPostProcessor.class.getClassLoader(), bean.getClass().getInterfaces(), new InvocationHandler() {
 //                @Override
 //                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

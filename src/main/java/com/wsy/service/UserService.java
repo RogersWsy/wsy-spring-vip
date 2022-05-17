@@ -10,7 +10,8 @@ import javax.sound.midi.Soundbank;
 import java.sql.SQLOutput;
 
 @Component("userService")
-@Scope("prototype")
+@Scope("prototype")//多例
+//@Scope("singleton")//单例
 //public class UserService implements  InitializingBean {
 //
 //    @Autowired
