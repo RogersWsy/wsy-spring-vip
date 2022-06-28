@@ -57,10 +57,23 @@ public class WsyApplicationContext {
                     field.set(instance,getBean(field.getName()));
                 }
             }
+
+            //实现创建bean的时候给属性 类的名字 赋值
+            if(instance instanceof BeanNameAware){
+                ((BeanNameAware)instance).setBeanName(beanName);
+            }
+
+            //初始化前执行方法
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                // 可以利用这种方式实现AOP，传进去一个对象，返回值赋值给这个对象本身
+                instance = beanPostProcessor.postProcessBeforeInitialization(instance,beanName);
+            }
             //3.初始化
             if(instance instanceof InitializingBean){
                 ((InitializingBean) instance).afterPropertiesSet();
             }
+
+            //初始化后执行方法
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
                 // 可以利用这种方式实现AOP，传进去一个对象，返回值赋值给这个对象本身
                 instance = beanPostProcessor.postProcessAfterInitialization(instance,beanName);
