@@ -6,8 +6,8 @@ import com.spring.*;
 import javax.sound.midi.Soundbank;
 import java.sql.SQLOutput;
 
-@Component("userService")
-@Scope("prototype")//多例
+//@Component("userService")
+//@Scope("prototype")//多例
 //@Scope("singleton")//单例
 //public class UserService implements  InitializingBean {
 //
@@ -38,6 +38,7 @@ public class UserService implements  UserInterface, BeanNameAware {
     public void test() {
         System.out.println(test);
         System.out.println(orderService);
+        System.out.println(beanName);
     }
 
     @Override
