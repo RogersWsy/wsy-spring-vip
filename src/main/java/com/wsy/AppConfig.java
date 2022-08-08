@@ -5,11 +5,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-@ComponentScan("com.wsy.service")
+@ComponentScan("com.wsy")
 public class AppConfig {
 
     @Bean
-    public MessageSource messageSource{
+    public MessageSource messageSource(){
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
         return messageSource;
