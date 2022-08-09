@@ -24,8 +24,8 @@ import java.sql.SQLOutput;
 //        System.out.println("初始化");
 //    }
 //}
-
-public class UserService implements  UserInterface, BeanNameAware {
+@Component
+public class UserService /*implements  UserInterface, BeanNameAware*/ {
 
     @Autowired
     private OrderService orderService;
@@ -41,10 +41,10 @@ public class UserService implements  UserInterface, BeanNameAware {
         System.out.println(beanName);
     }
 
-    @Override
-    public void setBeanName(String var1) {
-        this.beanName = var1;
-    }
+//    @Override
+//    public void setBeanName(String var1) {
+//        this.beanName = var1;
+//    }
 
 //    @Override
 //    public void afterPropertiesSet() {
