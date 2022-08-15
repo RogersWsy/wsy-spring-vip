@@ -8,11 +8,16 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.io.Resource;
 
+import javax.sound.midi.Soundbank;
+import java.io.IOException;
 import java.util.Locale;
+import java.util.Map;
 
 public class Test5 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 //        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 //        context.refresh();
@@ -37,5 +42,22 @@ public class Test5 {
 //        beanFactory.registerBeanDefinition("user",beanDefinition);
 //        System.out.println(beanFactory.getBean("user"));
         System.out.println(context.getMessage("test", null, new Locale("en")));
+
+        Resource resource = context.getResource("file://Users/wangsiyue/TuLing/wsy-spring-vip/src/main/java/com/wsy/AppConfig.java");
+        Resource resource1 = context.getResource("classpath:spring.xml");
+        Resource resource2 = context.getResource("https://www.baidu.com");
+        System.out.println(resource.contentLength());
+        System.out.println(resource1.contentLength());
+        System.out.println(resource2.contentLength());
+
+        Map<String, Object> systemEnvironment = context.getEnvironment().getSystemEnvironment();
+        System.out.println("systemEnvironment:"+systemEnvironment);
+
+        Map<String, Object> systemProperties = context.getEnvironment().getSystemProperties();
+        System.out.println("systemProperties:"+systemProperties);
+
+        MutablePropertySources propertySources = context.getEnvironment().getPropertySources();
+        System.out.println("propertySources:"+propertySources);
+
     }
 }
