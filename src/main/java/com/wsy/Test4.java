@@ -1,10 +1,10 @@
 package com.wsy;
 
+import com.wsy.service.StudentService;
 import com.wsy.service.UserService;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.annotation.AnnotationConfigurationException;
 
 public class Test4 {
     public static void main(String[] args) {
@@ -17,5 +17,8 @@ public class Test4 {
 
         UserService userService = (UserService)context.getBean("userService");
         userService.test();
+
+        StudentService studentService = (StudentService) context.getBean("studentService");
+        studentService.test();
     }
 }

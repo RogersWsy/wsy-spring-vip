@@ -43,11 +43,11 @@ public class Test5 {
 //        System.out.println(beanFactory.getBean("user"));
         System.out.println(context.getMessage("test", null, new Locale("en")));
 
-        Resource resource = context.getResource("file://Users/wangsiyue/TuLing/wsy-spring-vip/src/main/java/com/wsy/AppConfig.java");
+//        Resource resource = context.getResource("file://Users/wangsiyue/TuLing/wsy-spring-vip/src/main/java/com/wsy/AppConfig.java");
+//        System.out.println(resource.contentLength());
         Resource resource1 = context.getResource("classpath:spring.xml");
-        Resource resource2 = context.getResource("https://www.baidu.com");
-        System.out.println(resource.contentLength());
         System.out.println(resource1.contentLength());
+        Resource resource2 = context.getResource("https://www.baidu.com");
         System.out.println(resource2.contentLength());
 
         Map<String, Object> systemEnvironment = context.getEnvironment().getSystemEnvironment();
@@ -59,5 +59,8 @@ public class Test5 {
         MutablePropertySources propertySources = context.getEnvironment().getPropertySources();
         System.out.println("propertySources:"+propertySources);
 
+        System.out.println(context.getEnvironment().getProperty("NO_PROXY"));
+        System.out.println(context.getEnvironment().getProperty("sun.jnu.encoding"));
+        System.out.println(context.getEnvironment().getProperty("wsy"));
     }
 }

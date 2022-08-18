@@ -1,6 +1,8 @@
 package com.wsy;
 
 import com.spring.ComponentScan;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -17,4 +19,13 @@ public class AppConfig {
         return messageSource;
     }
 
+    @Bean
+    public ApplicationListener applicationListener(){
+        return new ApplicationListener() {
+            @Override
+            public void onApplicationEvent(ApplicationEvent event) {
+                System.out.println("接收到了一个事件"+event);
+            }
+        };
+    }
 }
